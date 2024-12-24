@@ -17,6 +17,29 @@ partition pd ls = foldr myfunc ([],[]) ls
         | pd x      = (x : first, second)
         | otherwise = (first, x : second)
 
+-- define foldl in terms of foldr
+reverseFoldable :: Foldable t => t a -> [a]
+reverseFoldable = foldr (\x acc -> acc ++ [x]) []
+
+foldl' :: Foldable t => (b -> a -> b) -> b -> t a -> b
+foldl' func acc ls = foldr myfunc acc (reverseFoldable ls)
+  where
+    myfunc x a = func a x
+-- foldl' (-) 0 [1, 2, 3, 4]    Result : -10
+-- foldl' (+) 0 [1, 2, 3]       Result : 6
+
+--- filter' and map' for test foldl'
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' pd ls = foldl' myfunc [] ls
+  where
+    myfunc result x
+        | pd x = result ++ [x]
+        | otherwise = result
+
+map' :: (a -> b) -> [a] -> [b]
+map' fn ls = reverse (foldl' myfunc [] ls)
+  where
+    myfunc result x = fn x : result
 
 -- define type Month whose values are months in a year
 data Month = January | February | March | April | May | June | July | August | September | October | November | December
