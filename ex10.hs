@@ -17,14 +17,6 @@ partition pd ls = foldr myfunc ([],[]) ls
         | pd x      = (x : first, second)
         | otherwise = (first, x : second)
 
--- define foldl in terms of foldr
-foldl' :: Foldable t => (b -> a -> b) -> b -> t a -> b
-foldl' func acc ls = foldr myfunc acc ls
-  where
-    myfunc x a = func a x
--- foldl' (-) 0 [1, 2, 3, 4]    Result : -10
--- foldl' (+) 0 [1, 2, 3]       Result : 6
-
 
 -- define type Month whose values are months in a year
 data Month = January | February | March | April | May | June | July | August | September | October | November | December
